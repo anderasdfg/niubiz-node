@@ -50,7 +50,7 @@ async function getToken(credentials) {
         headers: { authorization: "Basic " + credentials, Accept: "*/*" },
       }
     )
-    .catch((err) => err.response.data);
+    .catch((err) => err.response);
   return response.data;
 }
 
