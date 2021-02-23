@@ -1,7 +1,6 @@
 var express = require("express");
 const { desencryptObject } = require("../services/niubiz");
-
-
+var logger = require('morgan');
 var router = express.Router();
 const service = require("../services/niubiz");
 
@@ -68,10 +67,43 @@ router.get(
   }
 );
 
+router.get("/infovisa", async (req, res) => {
+  console.log(req.query.data);
+  let data64 = req.query.data;  
+  let dataStr = service.desencryptObject(data64);
+  let part = dataStr.split("|");
+  
+  let credentials = service.encryptCredentials(
+    part[1],
+    part[2]
+  );
+  let order = {
+    credentials: credentials,
+    amount: part[8],
+    email: part[9],
+    dni: part[10],
+    merchantId: part[3],
+    purchaseNumber: part[4],
+  };  
+
+  await service
+      .getBoton(order)
+      .then((result) => {
+        
+        if (!result.code) {
+          res.send(result);
+        } else {
+          console.log(result);
+          res.send(`Something wrong`);
+        }
+      })
+      .catch();
+
+});
+
 router.get(
   "/boton/:amount/:email/:dni/:user/:password/:merchantId/:purchaseNumber",
   async (req, res) => {
-   
     let credentials = service.encryptCredentials(
       req.params.user,
       req.params.password

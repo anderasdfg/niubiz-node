@@ -10,6 +10,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var niubizRouter = require('./routes/niubiz-routes');
 
+
 var app = express();
 
 app.use(logger(config.get('logger')));

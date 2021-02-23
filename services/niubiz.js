@@ -81,7 +81,7 @@ async function generateSession(order) {
         "Content-Type": "application/json",
       },
     })
-    .catch((err) => err.response.data);
+    .catch((err) => err.response);
   
   let session = {
     sessionKey: response.data.sessionKey,
@@ -167,7 +167,6 @@ function encryptObject(data) {
 }
 
 function desencryptObject(data) {  
-  let objJsonStr  = Buffer.from(data, "base64").toString("ascii");
-  //let obj = JSON.stringify(objJsonStr);
+  let objJsonStr  = Buffer.from(data, "base64").toString("ascii");  
   return objJsonStr;
 }
